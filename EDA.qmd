@@ -24,7 +24,7 @@ With a lot of research already having been done on this topic, certain health me
 
 library(tidyverse)
 library(ggplot2)
-
+library(knitr)
 ```
 
 
@@ -74,17 +74,118 @@ e+ geom_bar()
 i <- ggplot(diabetes_data_reduced, aes(x=Income))
 i+ geom_bar()
 
+
+
+```
+
+### Numeric summaries: 
+```{r}
+#age table 
+age_sum <- diabetes_data_reduced %>%
+  count(Age) %>%
+  mutate(Percentage = 100*(n / sum(n)))
+
+kable(age_sum)
+
+#sex table 
+sex_sum <- diabetes_data_reduced %>%
+  count(Sex) %>%
+  mutate(Percentage = 100*(n / sum(n)))
+
+kable(sex_sum)
+
+#income table 
+income_sum <- diabetes_data_reduced %>%
+  count(Income) %>%
+  mutate(Percentage = 100*(n / sum(n)))
+
+kable(income_sum)
+
+#Education table 
+education_sum <- diabetes_data_reduced %>%
+  count(Education) %>%
+  mutate(Percentage = 100*(n / sum(n)))
+
+kable(education_sum)
 ```
 
 
 
+Looking at the variables on their own we can see that our data set contains values for age and sex that are relatively normally distributed, with there being about 10% more females in the survey.  However, both education and income look pretty left skewed. This gives us a picture of our sample data.  It seems more people answering the survey have pursued a college degree (~42%) and most people answering the survey make over $75,000  (~36%).
 
 
 
+## Bivariate exploration: 
+
+Filled bar plots of variable categories vs. Diabetes outcome: 
+
+```{r}
+
+#age vs. diabetes
+ggplot(diabetes_data_reduced, aes(x = Age, fill = Diabetes_binary)) +
+  geom_bar(stat = "count")
+
+#sex vs. diabetes
+
+ggplot(diabetes_data_reduced, aes(x = Sex, fill = Diabetes_binary)) +
+  geom_bar(stat = "count")
+
+#education vs. diabetes
+
+ggplot(diabetes_data_reduced, aes(x = Education, fill = Diabetes_binary)) +
+  geom_bar(stat = "count")
+
+#income vs. diabetes
+
+ggplot(diabetes_data_reduced, aes(x = Income, fill = Diabetes_binary)) +
+  geom_bar(stat = "count")
 
 
 
+```
 
+### Bivariate Numerical Summaries:
+```{r}
+#age vs. diabetes
+age_v_diab <- diabetes_data_reduced %>% 
+  count(Age, Diabetes_binary) %>%
+  group_by(Age)%>%
+  mutate(Percentage = 100*(n/sum(n)))%>%
+  ungroup()
+
+kable(age_v_diab)
+#sex vs. diabetes
+sex_v_diab <- diabetes_data_reduced %>% 
+  count(Sex, Diabetes_binary) %>%
+  group_by(Sex)%>%
+  mutate(Percentage = 100*(n/sum(n)))%>%
+  ungroup()
+
+kable(sex_v_diab)
+
+#income vs. diabetes
+income_v_diab <- diabetes_data_reduced %>% 
+  count(Income, Diabetes_binary) %>%
+  group_by(Income)%>%
+  mutate(Percentage = 100*(n/sum(n)))%>%
+  ungroup()
+
+kable(income_v_diab)
+
+#education vs. diabetes
+education_v_diab <- diabetes_data_reduced %>% 
+  count(Education, Diabetes_binary) %>%
+  group_by(Education)%>%
+  mutate(Percentage = 100*(n/sum(n)))%>%
+  ungroup()
+
+kable(education_v_diab)
+```
+
+
+Looking at the levels of diabetes for each label within a variable turned out to be very interesting!  Diabetes visually appears to be normally distributed across ages.  At a glance, perhaps diabetes is more common in Males.  The most interesting two variable I'd especially like to investigate further are education and Income.  As education level increases the amount of diabetic cases appears decrease! Those who completed some high school showed about ~24% had diabetes, while of the college graduates only ~10% had diabetes.  Further, the proportion of those with diabetic outcomes appears to decrease as income increases as well!  
+
+We will continue with modeling to see how levels of Education, Income, and Sex perform as predictors of Diabetic outcomes. 
 
 
 [Click here for the Modeling Page](Modeling.html)
