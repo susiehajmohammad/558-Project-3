@@ -1,0 +1,90 @@
+---
+title: "Project 3 EDA"
+author: "Susan Hajmohammad"
+format: pdf
+---
+
+Introduction section
+You should have an introduction section that
+• briefly describes the data and the variables you have to work with.
+• describes the purpose of your EDA and ultimate goal of modeling.
+
+## Introduction: 
+
+Diabetes is a chronic illness that affects more than 36 million Americans and many more people world-wide.  Diabetes is a condition where the body’s cells don't respond to insulin properly, which leads to high blood sugar levels. It is currently understood to be irreversible and can result in a number of life altering comorbidities.  Studies shows that most cases of type 2 diabetes can be prevented through lifestyle changes.  As such, it is important to explore how certain health predictors are at predicting an outcome of diabetes because that would be a useful tool to predicting patient outcomes and guiding lifestyle interventions.  
+
+With a lot of research already having been done on this topic, certain health measurements are more obviously correlated with outcomes of diabetes (BMI, cholesterol, eating habits); so, for this EDA I wanted to explore some less obvious predictors of diabetes.  I will be looking at Age, Sex, Education level and Income level as predictors of Diabetes diagnosis.  
+
+
+## Libraries: 
+
+```{r}
+#| warning: FALSE
+#| message: FALSE
+
+library(tidyverse)
+library(ggplot2)
+
+```
+
+
+## Data: 
+
+Import data and change levels to meaningful names. 
+
+
+```{r}
+#read in diabetes data from folder
+diabetes_data <- read_csv("diabetes_data.csv")
+
+#now for chosen variables change each to factor and give meaningful labels for the levels
+diabetes_data_reduced <- read_csv("diabetes_data.csv")%>% 
+  mutate(Diabetes_binary = factor(Diabetes_binary, levels= c(0,1), labels=c("No Diabetes", "Diabetes")),
+         Sex = factor(Sex, levels= c(0,1), labels = c("Female", "Male")), 
+         # info sheet says 5 year increments
+         Age = factor(Age, levels = c(1,2,3,4,5,6,7,8,9,10,11,12,13), labels = c("18to24", "25to29", "30to34", "35to39", "40to44", "45to49", "50to54", "55to59", "60to64", "65to69", "70to74", "75to79", "80plus")),
+         Education= factor(Education, levels= c(1,2,3,4,5,6), labels=c("Never attended or only kindergarten","Elementary","Some high school", "High school graduate","Some college or technical school","College graduate")), 
+         Income = factor(Income, levels = c(1,2,3,4,5,6,7,8), labels = c("< $10,000","< $15,000","< $20,000","< $25,000", "< $35,000","< $50,000","< $75,000","$75,000+")))%>%
+  #select only relevant variables to work with smaller data set
+  select(Diabetes_binary, Age, Sex, Education, Income)
+
+```
+
+## Univariate analyses: 
+
+### Histograms for each variable: 
+
+```{r}
+
+#age 
+
+a <- ggplot(diabetes_data_reduced, aes(x=Age))
+a + geom_bar()
+
+#sex
+
+s <- ggplot(diabetes_data_reduced, aes(x=Sex))
+s+ geom_bar()
+
+#Education
+e <- ggplot(diabetes_data_reduced, aes(x=Education))
+e+ geom_bar()
+
+#Income
+i <- ggplot(diabetes_data_reduced, aes(x=Income))
+i+ geom_bar()
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+[Click here for the Modeling Page](Modeling.html)
