@@ -183,7 +183,7 @@ kable(education_v_diab)
 ```
 
 
-Looking at the levels of diabetes for each label within a variable turned out to be very interesting!  Diabetes visually appears to be normally distributed across ages.  At a glance, perhaps diabetes is more common in Males.  The most interesting two variable I'd especially like to investigate further are education and Income.  As education level increases the amount of diabetic cases appears decrease! Those who completed some high school showed about ~24% had diabetes, while of the college graduates only ~10% had diabetes.  Further, the proportion of those with diabetic outcomes appears to decrease as income increases as well!  
+Looking at the levels of diabetes for each label within a variable turned out to be very interesting!  Diabetes visually appears to be normally distributed across ages.  At a glance, perhaps diabetes is more common in Males (about ~3% more in our observed data).  The most interesting two variable I'd especially like to investigate further are education and Income.  As education level increases the amount of diabetic cases appears decrease! Those who completed some high school showed about ~24% had diabetes, while of the college graduates only ~10% had diabetes.  Further, the proportion of those with diabetic outcomes appears to decrease as income increases as well!  
 
 We will continue with modeling to see how levels of Education, Income, and Sex perform as predictors of Diabetic outcomes. 
 

@@ -4,7 +4,152 @@ author: "Susan Hajmohammad"
 format: pdf
 ---
 
+## Introduction: 
+
+After doing an exploratory data analysis on four variables in relation to diabetic outcomes, I found I was most interested to see how Sex, Income and Education performed as predictors of Diabetes diagnosis.  These were the four variables that, at a glance, showed possibly some effect of amount of diabetes. I also find it interesting that these predictors are not comorbidities, they are rather biological (sex) or socio-economic (income and education) categories that people fall into.  This means that without having extra medical measurements done, providers could be aware of how the risk differs between patients, and perhaps patients would consent to early screenings, etc.  Let's see how good these variables are at predicting a diabetic diagnosis!  
+
+### Libraries: 
+
+```{r}
+#| warning: FALSE
+#| message: FALSE
+
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(tidymodels)
+
+```
 
 
+### Data Split: 
+
+```{r}
+#split data into testing and training set with prop 70/30:
+set.seed(415)
+diab_split <- initial_split(diabetes_data_reduced, prop = 0.7)
+
+test <- testing(diab_split)
+  
+train <- training(diab_split)
+
+```
+
+## Logistic Regression Models: 
+
+### Recipes for LR models: 
+
+```{r}
+LR1_rec <- recipe(Diabetes_binary ~ Sex+ Income+ Education, data = train)%>%
+  step_dummy(all_nominal_predictors())
+
+LR2_rec  <- recipe(Diabetes_binary ~ Sex + Income, data = train) %>%
+  step_dummy(all_nominal_predictors())
+
+LR3_rec <- recipe(Diabetes_binary ~ Income + Education, data = train) %>%
+  step_dummy(all_nominal_predictors())
+
+```
+
+### Model specs: 
+
+```{r}
+#logistic regression model specs: 
+
+LR_spec <- logistic_reg() %>%
+  set_engine("glm")
+
+```
+
+### Workflows: 
+
+```{r}
+LR1_wkf <- workflow() %>%
+ add_recipe(LR1_rec) %>%
+ add_model(LR_spec)
+LR2_wkf <- workflow() %>%
+ add_recipe(LR2_rec) %>%
+ add_model(LR_spec)
+LR3_wkf <- workflow() %>%
+ add_recipe(LR3_rec) %>%
+ add_model(LR_spec)
+```
+
+
+### CV 5-fold 
+
+```{r}
+diab_cv_folds <- vfold_cv(train, v= 5)
+```
+
+### Fit to our CV folds: 
+
+```{r}
+LR1_fit <- LR1_wkf %>%
+ fit_resamples(diab_cv_folds, metrics = metric_set(accuracy, mn_log_loss))
+LR2_fit <- LR2_wkf %>%
+ fit_resamples(diab_cv_folds, metrics = metric_set(accuracy, mn_log_loss))
+LR3_fit <- LR3_wkf %>%
+ fit_resamples(diab_cv_folds, metrics = metric_set(accuracy, mn_log_loss))
+
+```
+
+### Collect metrics: 
+
+```{r}
+rbind(LR1_fit %>% collect_metrics(),
+ LR2_fit %>% collect_metrics(),
+ LR3_fit %>% collect_metrics()) %>%
+ mutate(Model = c("Model1", "Model1", "Model2", "Model2", "Model3", "Model3")) %>%
+ select(Model, everything())
+```
+
+The best model is model 1 because it is showing the lowest log loss and also has a smaller standard error.  It appears all of the models have similar accuracy so that didn't help in the selection process. 
+
+### Best model test on test set: 
+
+```{r}
+LR1_wkf |>
+ last_fit(diab_split, metrics = metric_set(accuracy, mn_log_loss)) |>
+ collect_metrics()
+```
+
+We got our best model, model 1, from the LR models and tested it on the test set.  On the test set our final LR model scored about an 86% accuracy and a log loss of 0.387. 
+
+In summary, the mean CV log-loss was 0.387, 0.389 and 0.389 for models 1,2, and 3 respectively.  This means the best model at predicting diabetes outcomes with new data was model 1 which included the Sex, Education and Income predictors.  We will keep this model and keep these variables in as predictors! 
+
+
+
+
+
+
+
+## Classification Tree
+
+```{r}
+
+
+
+
+```
+
+
+## Random Forest
+
+```{r}
+
+
+
+```
+
+
+## Final Model Selection
+
+```{r}
+
+
+
+
+```
 
 
