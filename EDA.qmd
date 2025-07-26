@@ -59,20 +59,20 @@ diabetes_data_reduced <- read_csv("diabetes_data.csv")%>%
 #age 
 
 a <- ggplot(diabetes_data_reduced, aes(x=Age))
-a + geom_bar()
+a + geom_bar(fill = "hotpink") + scale_y_continuous(labels = comma)
 
 #sex
 
 s <- ggplot(diabetes_data_reduced, aes(x=Sex))
-s+ geom_bar()
+s+ geom_bar(fill = "hotpink") + scale_y_continuous(labels = comma)
 
 #Education
 e <- ggplot(diabetes_data_reduced, aes(x=Education))
-e+ geom_bar()
+e+ geom_bar(fill = "hotpink") 
 
 #Income
 i <- ggplot(diabetes_data_reduced, aes(x=Income))
-i+ geom_bar()
+i+ geom_bar(fill = "hotpink") 
 
 
 
@@ -119,6 +119,8 @@ Looking at the variables on their own we can see that our data set contains valu
 
 Filled bar plots of variable categories vs. Diabetes outcome: 
 
+##add titles and labels
+
 ```{r}
 
 #age vs. diabetes
@@ -128,7 +130,7 @@ ggplot(diabetes_data_reduced, aes(x = Age, fill = Diabetes_binary)) +
 #sex vs. diabetes
 
 ggplot(diabetes_data_reduced, aes(x = Sex, fill = Diabetes_binary)) +
-  geom_bar(stat = "count")
+  geom_bar(stat = "count") + scale_y_continuous(labels = comma)
 
 #education vs. diabetes
 
