@@ -243,3 +243,14 @@ rf_final_fit %>% collect_metrics()
 ```
 
 
+```{r}
+#refit model without metrics for API
+final_fit_result <- LR1_wkf |>
+  last_fit(diab_split, metrics = metric_set(accuracy, mn_log_loss))
+
+#extract workflow and save rds
+fitted_workflow <- extract_workflow(final_fit_result)
+saveRDS(fitted_workflow, "logRegFit_1.rds")
+
+```
+
