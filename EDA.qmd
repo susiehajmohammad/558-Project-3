@@ -50,7 +50,7 @@ diabetes_data_reduced <- read_csv("diabetes_data.csv")%>%
 
 ```
 
-## Univariate analyses: 
+## Univariate analyses:  
 
 ### Histograms for each variable: 
 

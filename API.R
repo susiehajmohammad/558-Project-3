@@ -1,12 +1,12 @@
 # api.R
 
-# Load necessary libraries
+#load necessary libraries
 library(plumber)
 library(readr)
 library(dplyr)
 library(tidymodels)
 
-# Read in the processed dataset
+#read in the dataset and mutate
 diabetes_data_reduced <- read_csv("diabetes_data.csv") %>% 
   mutate(
     Diabetes_binary = factor(Diabetes_binary, levels = c(0, 1), labels = c("No Diabetes", "Diabetes")),
